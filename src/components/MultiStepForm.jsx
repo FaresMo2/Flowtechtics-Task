@@ -1,22 +1,18 @@
-import { useState } from "react";
 import ImageUpload from "./ImageUpload";
 import { TiDelete } from "react-icons/ti";
 import { useEmployees } from "../context/EmployeesContext"; // Import the useEmployees hook
 import FormSteps from "./FormSteps";
 
 const MultiStepForm = () => {
-  const { handleAddEmployees, setIsOpen } = useEmployees(); // Get handleAddEmployees from context
-  const { currentStep, setCurrentStep } = useEmployees();
-  const [formData, setFormData] = useState({
-    name: "",
-    startDate: "",
-    role: "",
-    email: "",
-    phone: "",
-    img: "", // Placeholder for image (if added)
-  });
+  const {
+    handleAddEmployees,
+    setIsOpen,
+    currentStep,
+    setCurrentStep,
+    formData,
+    setFormData,
+  } = useEmployees(); // Get handleAddEmployees from context
 
-  // Handler for form data change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -25,49 +21,40 @@ const MultiStepForm = () => {
     });
   };
 
-  // Handler to go to the next step
-  const nextStep = () => {
-    setCurrentStep(currentStep + 1);
-  };
+  const nextStep = () => setCurrentStep(currentStep + 1);
+  const prevStep = () => setCurrentStep(currentStep - 1);
 
-  // Handler to go to the previous step
-  const prevStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
-  // Submit handler for the form
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent page refresh
+    e.preventDefault();
     handleAddEmployees({
-      id: Date.now(), // Generating a unique ID for the new employee
+      id: Date.now(),
       ...formData,
-      active: true, // Default the new employee to active
+      active: true,
     });
-    // Reset the form and go back to step 1 after submitting
     setFormData({
       name: "",
       startDate: "",
       role: "",
       email: "",
       phone: "",
-      img: "",
+      img: "", // Reset the image field
     });
     setCurrentStep(1);
   };
 
-  // Function to render each step content
-  const renderStepContent = () => {
+  function renderStepContent() {
     switch (currentStep) {
       case 1:
         return <PersonalData formData={formData} handleChange={handleChange} />;
       case 2:
+        // Pass formData and setFormData to ImageUpload
         return <ImageUpload formData={formData} setFormData={setFormData} />;
       case 3:
         return <Preview formData={formData} />;
       default:
         return <PersonalData formData={formData} handleChange={handleChange} />;
     }
-  };
+  }
 
   return (
     <>
@@ -202,7 +189,7 @@ function Preview({ formData }) {
             <div className="flex items-center -ml-3 gap-x-2">
               <img
                 src={formData.img}
-                alt="Employee"
+                alt="Employee-image"
                 className="w-12 h-12 rounded-full"
               />
               <p className="text-sm font-medium">{formData.name}</p>

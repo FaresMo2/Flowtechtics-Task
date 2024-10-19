@@ -120,6 +120,14 @@ function EmployeesProvider({ children }) {
   const [employees, setEmployees] = useState(employeesData);
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: "",
+    startDate: "",
+    role: "",
+    email: "",
+    phone: "",
+    img: "", // Image field in formData
+  });
 
   function handleAddEmployees(employee) {
     setEmployees((employees) => [...employees, employee]);
@@ -141,6 +149,8 @@ function EmployeesProvider({ children }) {
         handleDeleteEmployees,
         currentStep,
         setCurrentStep,
+        formData,
+        setFormData,
       }}
     >
       {children}
